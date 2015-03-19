@@ -1,5 +1,4 @@
 <?php
-
 function consultar($query)
 {
 	$host = 'localhost'; //Escribir el host
@@ -11,17 +10,29 @@ function consultar($query)
 	$link = mysqli_connect($host, $user, $password) or die('No se pudo conectar: ' . mysqli_error());
 
 	mysqli_select_db($link, $database) or die('No se pudo seleccionar la base de datos');
+
+	//$tildes = $link->query("SET NAMES 'utf8'");
 	$response = mysqli_query($link, $query);
 	$c = 0;
 
-	while( $row = mysqli_fetch_assoc($response))
+	if ($response === true)
 	{
-		$result[$c] = $row;
-		$c++;
+		//echo "El valor es true, no hay datos para devolver";
 	}
-	return($result);
+	else
+	{
+		while($row = mysqli_fetch_assoc($response))
+		{
+			$result[$c] = $row;
+			$c++;
+		}
+
+		return($result);
+	}
+
 	mysqli_close($link);
 }
+?>
 
 /* FORMA DE USO
 	require("conexion.php");
